@@ -2,9 +2,9 @@
 # 1-repetition_token_0.rb
 # Usage: ./1-repetition_token_0.rb "some_string"
 
-input = ARGV[0] || ''
-match = input.scan(/hbt+n/).join
-puts match
+puts ARGV[0].scan(/hbt{2,5}n/).join
+
+
 
 
 
