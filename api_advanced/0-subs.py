@@ -1,3 +1,10 @@
+
+
+
+
+
+
+
 #!/usr/bin/python3
 """Return the number of subscribers for a given subreddit using Reddit API."""
 
@@ -9,10 +16,10 @@ def number_of_subscribers(subreddit):
     Return total subscribers for a subreddit, or 0 if invalid.
 
     Args:
-        subreddit (str) : the subreddit to query 
+        subreddit (str): the subreddit to query
 
     Returns:
-        int : the number of subscribers for the reddit , returns 0 if the subreddit is invalid     
+        int: the number of subscribers for the subreddit, or 0 if invalid
     """
     if subreddit is None or not isinstance(subreddit, str):
         return 0
@@ -22,7 +29,10 @@ def number_of_subscribers(subreddit):
 
     try:
         response = requests.get(
-            url, headers=headers, allow_redirects=False, timeout=10
+            url,
+            headers=headers,
+            allow_redirects=False,
+            timeout=10
         )
         if response.status_code != 200:
             return 0
