@@ -12,9 +12,9 @@ def top_ten(subreddit):
         subreddit (str): The subreddit to query.
 
     Prints:
-        The titles of the first 10 hot posts, or None if invalid subreddit.
+        The titles of the first 10 hot posts, or None if the subreddit is invalid.
     """
-    if subreddit is None or not isinstance(subreddit, str):
+    if not isinstance(subreddit, str) or not subreddit:
         print(None)
         return
 
@@ -43,5 +43,5 @@ def top_ten(subreddit):
         for post in posts[:10]:
             print(post.get("data", {}).get("title"))
 
-    except Exception:
+    except requests.exceptions.RequestException:
         print(None)
