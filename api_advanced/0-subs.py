@@ -1,36 +1,26 @@
 #!/usr/bin/python3
-"""Return the number of subscribers for a given subreddit using Reddit API."""
+"""
+Module to query Reddit API for subreddit subscriber counts
+"""
 
 import requests
 
 
 def number_of_subscribers(subreddit):
     """
-    Return total subscribers for a subreddit, or 0 if invalid.
+    Queries Reddit API and returns number of subscribers for a given subreddit
 
     Args:
-        subreddit (str): the subreddit to query
+        subreddit (str): The subreddit to query
 
     Returns:
-        int: the number of subscribers for the subreddit, or 0 if invalid
+        int: Number of subscribers, 0 if invalid subreddit
     """
-    if subreddit is None or not isinstance(subreddit, str):
-        return 0 
-
     url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
-    headers = {"User-Agent": "ALU-Reddit-Task/0.1"}
-    
-    try:
-        response = requests.get(
-            url,
-            headers=headers, 
-            allow_redirects=False,
-            timeout=10
-        ) 
-        if response.status_code != 200:
-            return 0
+    headers = {'User-Agent': 'alu-scripting-api-advanced'}
 
-        data = response.json().get("data", {})
-        return data.get("subscribers", 0)
-    except Exception:
-        return 0
+    response = requests.get(url, headers=headers, allow_redirects=False)
+    if response.status_code == 200:
+        data = response.json()
+        return data.get('data', {}).get('subscribers', 0)
+    return 0
