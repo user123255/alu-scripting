@@ -1,28 +1,27 @@
 #!/usr/bin/python3
-"""
-Return and print the titles of the first 10 hot posts for a given subreddit
-using the Reddit API.
+"""Module that queries the Reddit API and prints the top 10 hot posts
+for a subreddit.
+
+Provides the function `top_ten(subreddit)` which prints the titles of the
+first 10 hot posts for the given subreddit. Prints ``None`` if the subreddit
+is invalid or an error occurs.
 """
 
 import requests
 
 
 def top_ten(subreddit):
-    """
-    Query the Reddit API and print the titles of the first 10 hot posts.
+    """Print the titles of the first 10 hot posts for a subreddit.
 
     Args:
-        subreddit (str): The subreddit to query.
+        subreddit (str): Name of the subreddit to query.
 
-    Prints:
-        The titles of the first 10 hot posts, or None if invalid subreddit.
+    Output:
+        Prints one title per line for the first 10 hot posts, or prints
+        ``None`` if the subreddit is invalid or an error occurs.
     """
-    if subreddit is None or not isinstance(subreddit, str):
-        print(None)
-        return
-
     url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {"User-Agent": "ALU-Reddit-Task/0.1"}
+    headers = {"User-Agent": "python:alx.api:0.1 (by /u/your_username)"}
     params = {"limit": 10}
 
     try:
@@ -33,23 +32,25 @@ def top_ten(subreddit):
             allow_redirects=False,
             timeout=10
         )
-
-        # Check for invalid subreddit or HTTP error
-        if response.status_code != 200:
-            print(None)
-            return
-
-        data = response.json().get("data", {})
-        posts = data.get("children", [])
-
-        if not posts:
-            print(None)
-            return
-
-        # Print the first 10 hot post titles
-        for post in posts[:10]:
-            print(post.get("data", {}).get("title"))
-
-    except Exception:
+    except requests.exceptions.RequestException:
         print(None)
+        return
 
+    if response.status_code != 200:
+        print(None)
+        return
+
+    try:
+        children = response.json().get("data", {}).get("children", [])
+    except ValueError:
+        print(None)
+        return
+
+    if not children:
+        print(None)
+        return
+
+    for child in children:
+        title = child.get("data", {}).get("title")
+        if title:
+            print(title)
